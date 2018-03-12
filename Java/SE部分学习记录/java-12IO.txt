@@ -1,0 +1,31 @@
+1.	File类存在的意义：File类可以进行外部设备的封装
+	File类：java.io包中的类，既可以代表一个文件，也可以代表一个路径
+	File(String pathname):根据pathname来封装一个具体的实例
+	mkdir()/mkdirs()都是创建路径到硬盘的方法：前面方法创建必须给定父文件夹的路径，后者可以连带创建；
+	保险起见，通常使用后者。
+2.IO流：程序和外设之间进行信息交流的一个传输工具
+	<1>按照数据的流向：
+		输入流:InputStream/Reader 进行读的操作
+		输出流：OutputStream/Writer 进行写的操作
+		输入输出时相对于内存而言
+	<2>按照在传输数据时的操作类型：
+		字符流：Reader/Writer ---操作以字符为基本单位
+		字节流：InputStram/OutputStream---操作以字节为基本单位（二进制数据--音乐，图片，视频等等）
+	<3>按照流中所封装的数据类型:
+		节点流：IO中封装直接的数据类型
+		处理流：IO中封装IO  BufferedInputStream/BufferedOutputStream
+							BufferedReader/BufferWriter
+				注意：加缓冲之后，在写的时候需要flush(刷新).
+	<4>转换流：字节流字符流的中间桥梁---InputStreamReader/OutputStreamWriter			
+	<5>对象流:用于传输对象的IO(ObjectInputStream/ObjectOutputStream)
+		序列化：将对象转换成可传输状态的过程
+		反序列化：将序列化之后的对象进行重新塑造对象的过程
+		结论：一个java类要能被序列化必须实现Serializable(特殊在其中什么内容也没有，被实现之后，
+			实现类被赋予了可序列化的能力)
+			
+总结IO编程的步骤：
+	1.创建File进行封装
+	2.创建处理Fiel的节点流
+	3.是否加缓冲
+	4.读写
+	5.关闭

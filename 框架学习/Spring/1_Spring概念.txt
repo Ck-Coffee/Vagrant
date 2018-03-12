@@ -1,0 +1,69 @@
+一.IOC Inverse Of Control 反转控制
+	以前对象的创建是由开发人员自己维护，包括依赖关系也是自己注入
+	现在使用Spring之后，对象的创建以及依赖关系可以由spring完成创建以及注入
+二.DI Dependency 依赖注入
+	实现IOC思想需要DI做支持
+		注入方式：
+			set方法注入
+			构造方法注入
+			字段注入
+		注入类型
+			值类型注入 -> 八大基本数据类型
+			引用类型注入 -> 将依赖对象注入
+			
+三.思想 ApplicationContext & BeanFactory
+		1.BeanFactory: Spring原始接口，功能单一，实现类的容器，特点是每次在获得对象时才会创建对象
+		2.ApplicationContext：
+			a.每次容器启动时就会创建容器中配置的所有对象，并提供更多功能
+			b.从类路径下加载配置文件：ClassPathXmlApplicationContext
+		    c.从硬盘绝对路径下加载配置文件：FileSystemXmlApplicationContext
+四.创建对象
+	1.无参构造 :Bean 中只需配置 name和class属性就可以
+	2.静态工厂	:Bean 中的class是工厂类名 
+			
+			例：<bean name="" class="静态工厂类的路径" factory-method="静态工厂方法"></bean>
+	
+	3.实例工厂:需要配置工厂的bean 然后实例类中的 factory-bean属性指向工厂类的
+			例：<bean name="userFactory" class="com.ck.factory.UserFactory.java">
+				<bean name="user" class="com.ck.entity.User.java"
+						factory-bean="userFactory" factory-method="getIntance">
+				其中UserFactory是工厂类， User是实体类， 
+				getIntance()方法是工厂类中的一个实例方法（返回User的一个实例）
+
+五.注入方式：
+	1.set方法注入:
+	
+	2.构造注入
+	
+	3.命名空间注入：
+		p:
+六.复杂类型注入
+	了解数组，对象，集合类，配置的注入
+	例如：List注入								
+			<property name="list">
+				<list>
+					<value></value>
+					<value></value>
+					<ref bean=""/>
+				</list>
+			</property>
+			
+			Map注入
+			<property name="map">
+				<map>
+					<entry key="" value=""></entry>
+					<entry key="" value-ref=""></entry>
+					<entry key-ref="" value-ref=""></entry>
+				</map>
+			</property>
+			
+			properties注入
+			<property name="prop">
+				<props>
+					<prop key="url">com.jdbc.mysql.Driver</prop>
+					<prop key="root">coffee</prop>
+					<prop key="password">a123</prop>
+				</props>
+			</property>
+			
+		注：ref表示引用类型

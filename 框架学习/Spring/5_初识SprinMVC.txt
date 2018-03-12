@@ -1,0 +1,78 @@
+一.资源的位置及访问
+	1.在WebContext下，属于共享资源；在不添加过滤器的情况下,任何正确的url都可以访问到。
+	2.在WEB-INF下，属于内部资源；需要添加资源映射，拦截请求,视图解析后,才可以渲染给外部。
+二.资源映射的添加。
+	1.xml配置：<mvc:view-controller path="/login" view-name="login"/>
+	2.注解配置：
+			@RequestMapping("/login")
+			public String loginView() {
+				return "login";
+			}
+	
+	另外还有静态资源的访问及映射(例如图片，js)
+	<!-- 指定映射的静态资源的路径(localtion 工程物理路径) mapping url路径 -->
+	 <mvc:resources location="/WEB-INF/img/" mapping="img/**"></mvc:resources>
+	 
+	 注意：最后必须添加：<mvc:annotation-driven/>，否则扫描不到。
+	 
+三.拦截请求：
+	<servlet>
+		<servlet-name>springDispatcherServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:spring.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup><!-- 服务器一启动，就初始化该servlet -->
+	</servlet>
+
+	<!-- Map all requests to the DispatcherServlet for handling -->
+	<servlet-mapping>
+		<servlet-name>springDispatcherServlet</servlet-name>
+		<url-pattern>/</url-pattern> <!-- 这里就意味着拦截所有带"/"的URL的请求 -->
+	</servlet-mapping>
+	
+四.视图解析：
+	<!-- 视图解析器(按照名称来解析对于的文件) (当页面存放在WEB-INF目录下 客户端不能直接访问 经过视图进行资源映射)-->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+	
+五.关于@RequestMapping的使用：
+	1.基本信息:
+		//RequestMapping 标识当前的方法是一个处理请求的方法(映射请求到指定的方法)
+		//value 指定当前方法映射那些请求(String[] 一个方法映射多个请求)
+		//method 请求的方式(POST,GET) method=RequestMethod.POST 那么当前的方法只能处理请求为/test /testHandler 请求方式post
+		//header={"host"} 标识当前请求头信息中必须包含请求头的hostkey信息
+		//params={"userName"} 限定当前请求中必须包含请求参数userName
+		//path={"test/*"} 限定请求中必须要test/任意的字符
+		@RequestMapping(
+					method=RequestMethod.GET,
+					headers= {"host"},
+					params= {"userName"},path= {"/test"})
+		public String testHandler(String userName) {
+			System.out.println("testHandler");
+			System.out.println(userName);
+			return "index";
+		}
+	
+	2.@RequestParam 标识请求参数和方法参数的关系:
+		//name 指定把当前请求参数中的那个key的值存入当前方法参数中
+		//required 指定当前的请求参数是否为必须的(默认为true) false 那么不要求请求中必须携带当前参数
+		//defaultValue 如果请求中没有指定的参数 而且required 又是为false 把defaultValue的值存入当前的参数
+		@RequestMapping(value="/login")
+		public String loginHandler(@RequestParam(name="uname",required=false,defaultValue="admin")String userName,@RequestParam(name="upwd",required=false,defaultValue="a111")String userPwd) {
+			System.out.println(userName+"---"+userPwd);
+			return "index";
+		}
+	
+	3.resetFull式的URL:
+		@PathVariable 把请求路径中某个变量值存入参数
+		@RequestMapping(path= {"{age}/test/{id}/{name}"})
+		public String test1Handler(@PathVariable("id")int id,@PathVariable("name")String name,@PathVariable("age")int age) {
+			System.out.println(id);
+			System.out.println(name);
+			System.out.println(age);
+			return "index";
+		}

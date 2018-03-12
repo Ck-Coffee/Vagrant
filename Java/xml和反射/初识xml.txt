@@ -1,0 +1,65 @@
+XML语法
+ 一.声明
+	1.必须在零行零列，且必须以<?xml>开头
+	2.标签必须有开始和闭合
+ 二.元素（类似于html中的标签）
+	
+ 三.属性
+	是元素的一部分，不能重复
+ 四.转义字符
+		例：'<' 需要用 &lt; 表示
+		
+		<[CDATA[
+			<!-- 这里写的东西可以不用转义字符 -->
+		]]>
+		
+		可以增加可读性
+ 五.DTD约束
+		分为外部【网络(PUBLIC),本地(SYSTEM)】,内部(自己定义),前两者都是链接约束
+		
+		引入约束(本地)：<!DOCTYPE web-app SYSTEM "web-app_2_3.dtd">
+		
+		我们写的XML都是根据这个约束写的
+		
+ 六.Schema约束
+		1.新的文档约束，是DTD的替代品，数据类型更加完善
+		2.也是XML文档，但扩展名是 .xsd
+		3.支持命名空间,解决冲突问题（类似于java中的包）
+		
+		引用：<web-app xmlns="http://www.example.org/web-app_2_5" 
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					xsi:schemaLocation="http://www.example.org/web-app_2_5 web-app_2_5.xsd"
+					version="2.5">
+			  <web-app>
+ 七.XML的解析
+	解析方式：
+		A.DOC ->方便，可以进行增删改查，读取时加载整个文件，所以当文档特别大的时候，容易造成内存溢出
+		B.SAX ->由事件驱动，边扫描边解析,速度快，可以读取大文件，但只能读,逐行后释放资源。
+		C.PULL ->Android内置的XML解析方式，类似于SAX
+	
+ 八.使用dom4j解析XML文档
+		模板：
+ 			//1.获取解析器
+			SAXReader saxReader = new SAXReader();
+			//2.获得document文档对象
+			Document doc = saxReader.read("src/com/ck/xml/schema/web.xml");
+			//3.获取根节点
+			Element rootElement=doc.getRootElement();
+			
+			//System.out.println(rootElement.getName());
+			//4.获取根元素下的子元素
+			
+			List<Element> childElement =rootElement.elements();
+			
+			//5.遍历子元素
+			for(Element element : childElement) {
+				//6.判断元素名称为servlet的元素
+				if("servlet".equals(element.getName())) {
+					//7.获取servlet-name元素
+					Element servletName = element.element("servlet-name");
+					Element servletClass = element.element("servlet-class");
+					System.out.println(servletName.getText());
+					System.out.println(servletClass.getText());
+				}
+			}
+		

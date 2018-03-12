@@ -1,0 +1,38 @@
+一.还是按照连接数据库的那套流程
+	持久层->服务层->视图层
+	这里仅介绍spring在前两个层面的应用
+		1.首先需要定义配置文件（properties或xml）
+			properties只要配置键值对就好
+			这里，我给出一个xml的模板
+			<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+				<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+				<property name="url" value="jdbc:mysql://localhost:3306/test?useSSL=true"></property>
+				<property name="username" value="root"></property>
+				<property name="password" value="LO164275983017VE"></property>
+			</bean>
+		2.持久层的注解：@Repository
+		  服务层的注解：@Service
+		  视图层的注解：@Controller
+		  而注入方式自行选择(构造，set皆可)
+		3.如果采用的properties的方式配置还需要写一个配置类，才能拿到里面的内容,并且可以用Class对象直接拿到，而XML不行，必须配置，且还需要扫描
+			例如：  
+					//标识当前类是一个Spring配置类
+					@Configuration
+					//定义扫描的基础包
+					@ComponentScan(basePackages= {"com.hellojava"})
+					//导入properties文件
+					@PropertySource("classpath:db.properties") 
+					public class SpringConfiguration {
+						@Autowired
+						private Environment env;
+						
+						@Bean(name="dataSource")
+						public DataSource initDateSource() {
+							DriverManagerDataSource dataSource=new DriverManagerDataSource();
+							dataSource.setDriverClassName(env.getProperty("driver"));
+							dataSource.setUrl(env.getProperty("url"));
+							dataSource.setUsername(env.getProperty("user"));
+							dataSource.setPassword(env.getProperty("password"));
+							return dataSource;
+						}
+					}

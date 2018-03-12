@@ -1,0 +1,31 @@
+1.Object类：java体系里面的顶级父类
+    toString():在进行对象的打印输出时默认访问的一个方法，Object类中默认实现是包名.类名.@对象的十六进制表示，
+	想自定义地输出对象的信息，可以自己重写。
+	equal():使用比较引用数据类型是否相等的一个方法，在Object类中的实现和“==”的作用是一样的，此时比较的是对象的虚地址
+	其存在的意义就是用来判断两个对象里面的内容是否相同，所以我们使用时应将其重写。
+	hashCode():Object中定义的方法，辅助equals()的调用，不同的对象有可能产生相同的hashCode()值，
+	但是equals()不一定返回true；反之一定。使用时需要重写。
+2.Math：
+		Random：生成伪随机数的工具类
+3.Date：此类给我们提供当前系统时间--类 Date 表示特定的瞬间，精确到毫秒
+	DateFormat:对Date进行无语言环境影响的格式化
+	SimpleDateFormat:
+	Calendar：针对单个日历字段进行操作
+4.BigInteger：大整数，超过范围的大整数运算时将其封装成此对象，利用其方法进行运算
+	重点掌握方法：
+	Object[] a; 对象型数组
+	Object：所有Java引用数据类型的顶级父类，因此Object[] a是其子类
+	Comparable接口：Arrays.sort(Object[] a):对象型数组进行排序是所必须实现的接口并且实现里面的
+					public int comparableTo(Object o){
+					    return 0;
+					}
+5.国际化：i18n------>internationalization
+
+car类：
+	name speed 提供get set 方法 重写toString{名字 速度}
+	
+GPS接口：
+	写一个GetLocation方法{确定车的方位}
+Point类：
+	X，Y
+GPSCar类：继承Car，实现GPS，

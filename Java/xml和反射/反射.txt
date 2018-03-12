@@ -1,0 +1,27 @@
+一.反射:就是在运行状态中，动态获取指定类以及类的内容，并运行其内容
+	三种获取Class对象手段
+		1.类名.Class
+		2.对象名.getClass()
+		3.Class.forName("全限定名");
+二.对方法的调用
+			Class clazz = Class.forName("全限定名");
+			//获得实例对象
+			Object obj = clazz.newInstance();
+			//无参方法调用，后面是参数列表
+			Method method =clazz.getMethod("方法名", null);
+			method.invoke(obj, null);
+			//有参方法调用
+			Method method1 = clazz.getMethod("方法名", int.class);
+			method1.invoke(obj, 1);
+三.解析xml文件并通过反射创建对象并调用方法
+			大致过程如下
+			SAXReader saxReader = new SAXReader();
+			Document document = saxReader.read("src/com/ck/web/servlet1/web.xml");
+			Element rootElement = document.getRootElement();
+			//System.out.println(rootElement);
+			Element servletElement = rootElement.element("servlet");
+			String servletClass = servletElement.elementText("servlet-class");
+			Class clazz = Class.forName(servletClass);
+			Object obj = clazz.newInstance();
+			Method method = clazz.getMethod("service", int.class);
+			method.invoke(obj, 10);

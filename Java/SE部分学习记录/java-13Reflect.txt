@@ -1,0 +1,14 @@
+java中的反射机制：动态的，逆向获取当前类中的所有信息以及访问的一种机制
+Class类：是用来封装引用数据类型中该类的具体信息
+	创建Class对象：类名.class/对象名.getClass()/Class.forName("包名.类名")
+	newInstance()//利用反射机制创建该类的一个实例
+	getMethod("方法名"，类型.class列表)//利用Class对象获取具体的某一方法
+	getMethods()//利用反射获取该类中所有方法的对象
+
+	
+	Filed:用来封装某个类中所有属性的信息----一个属性就是Filed的一个实例、
+	Method:用来封装所有方法的信息----一个方法就是Method的一个实例
+		重要的实例方法： Object invoke(Object obj,Object... args)
+						对带有指定参数的指定对象调用由此 Method 对象表示的底层方法。
+
+	Constructor:用来封装所有构造器的信息----一个构造器就是Constructor的一个实例

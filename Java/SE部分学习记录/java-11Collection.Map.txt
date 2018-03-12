@@ -1,0 +1,20 @@
+1.集合框架
+	Collection：单值保存根接口
+	Collections：单值保存根接口工具类 copy（）
+		Vector:线程不安全，效率高
+			①List有序可重复
+				a.ArrayList：线程安全，效率比Vector差（类似一个动态数组）
+				b.LinkedList 相比ArrayList在插入和删除时效率高
+			②Set 无序不可重复（此容器中元素所在类必须重写equals()与hashCode()）
+				a.HashSet
+					
+				b.TreeSet
+					对set集合进行排序
+	Map：键值对根接口,映射关系，不重复无序
+		HashMap:
+			
+		TreeMap:
+			对Map集合进行排序
+		HashTable:
+	Iterator:迭代器接口，实现简单迭代
+		ListIterator:可以实现随意迭代

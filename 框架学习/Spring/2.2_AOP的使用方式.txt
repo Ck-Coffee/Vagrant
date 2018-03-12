@@ -1,0 +1,111 @@
+一.这里介绍几种AOP的配置方式
+	1.使用纯.XML文档配置
+		那就需要自己定义服务类，切面类，通知类，并在xml中配置代理proxy
+		
+		例如：这是代理的配置方式，不要忘了在xml中配置你的其他Bean
+		<bean id="proxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+			<property name="target" ref="bookService2"></property>
+			<property name="interceptorNames">
+				<array>
+					<value>beforeAdvice</value>
+				</array>
+			</property>
+			<property name="proxyInterfaces" value="com.ck.business.IService"></property>
+		</bean>
+	2.使用注解的方式
+		与上面的区别就在于不用写xml文件，但需要一个配置类
+		例如：
+		@Configuration
+		public class SpringConfiguration {
+	
+			@Bean(name="bookDao")
+			public IBookDao bookDaoInstance() {
+				return new BookDao();
+			}
+			
+			@Bean(name="aspect")
+			public LogAspect logInstance(){
+				return new Log();
+			}
+			
+			@Bean(name="inter",autowire=Autowire.BY_NAME)
+			public MyInterceptor interceptorInstance() {
+				MyInterceptor inter = new MyInterceptor();
+				 return inter;
+			}
+			
+			@Bean(name="proxy")
+			public ProxyFactoryBean proxyBean() {
+				ProxyFactoryBean factoryBean = new ProxyFactoryBean();
+				factoryBean.setTarget(bookDaoInstance());//设置目标
+				factoryBean.setInterceptorNames(new String[] {"inter"});//设置切面并赋值
+				factoryBean.setInterfaces(IBookDao.class);//设置接口
+				return factoryBean;
+			}
+		}
+	3使用aop配置
+		特点：不用定义通知类，直接在<aop:config>中定义连接点pointcut
+		例如：
+		<!-- aop 配置 -->
+		<aop:config>
+			<!-- 定义连接点(在什么地方加入通知) -->
+			<aop:pointcut expression="execution(* com.hellojava.business.IBookService.save(..))" id="point1"/>
+			<aop:pointcut expression="execution(* com.hellojava.business.IBookService.*(..))" id="point2"/>
+			<!-- 配置切面(切面引用的是log) -->
+			<aop:aspect ref="log"><!-- log是你的切面类id(name) -->
+				<!-- 定义后置通知 调用的log对象after方法 在什么时候调用在point1 的地方调用 -->
+				<!-- <aop:after method="after" pointcut-ref="point1"/>
+				<aop:before method="before" pointcut-ref="point1"/> -->
+				<aop:around method="around" pointcut-ref="point1"/>
+			</aop:aspect>
+		</aop:config>
+	4.注解+扫描
+	
+	例如：	
+		切面类的定义格式：
+			//当前是一个切面
+			@Aspect
+			//表明是一个组件
+			@Component("logAspect")
+			public class LogAspect implements ILogAspect{
+				
+				//定义连接点，注意书写格式
+				@Pointcut("execution(* com.ck.business.IBookService.save(..))")
+				public void beforePoint(){}
+
+				@Pointcut("execution(* com.ck.business.IBookService.save(..))")
+				public void afterPoint() {}
+				
+				@Pointcut("execution(* com.ck.business.IBookService.save(..))")
+				public void aroundPoint() {}
+				
+				
+				//连接点的调用方法，注意要与连接点的方法名一致
+				@Before("beforePoint()")
+				public void before() {
+					System.out.println("before");
+				}
+				
+				@After("afterPoint()")
+				public void after() {
+					System.out.println("after");
+				}
+				
+				@Around("aroundPoint()")
+				public Object around(ProceedingJoinPoint joinPoint) {
+					System.out.println("around before");
+					Object obj = null;
+					try {
+						obj = joinPoint.proceed();
+					} catch (Throwable e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					System.out.println("around after");
+					return obj;
+					
+				}
+
+			}
+
+		

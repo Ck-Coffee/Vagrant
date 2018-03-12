@@ -1,0 +1,30 @@
+1.可变长参数：在方法的参数区以“数据类型... 变量名”语法定义
+	可变长的参数实质是数组。
+	public static void  a(int... nums){//nums是一个INT类型的可变参数
+			int[] b=new int[nums.length];
+			for(int i=0;i<b.length;i++){
+				b[i]=nums[i];
+			}
+			for(int i=0;i<b.length;i++)
+				System.out.println("b["+i+"]="+b[i]+" ");
+		}
+ 注意：①.如果有明确的方法可调用，会优化选择”已明确的方法“，如果没有明确的方法，才会选择可变参数对应的方法。
+       ②.Java允许存在多个可变参数的方法，但在调用时如果有多个方法可供选择，则会出现编译时间的异常提示。
+       ③.定义方法参数时，可变参数只能写在最后一个参数位置上，否则编译期会提示异常。 
+
+2.包装器类型:八种基本数据类型都有其对应的包装器类型(除int与char有区别外，其余的类型都是将首字母大写)
+	/*c语言注释：等同于声明了一个变量然后对其取地址*/
+	基本数据类型			包装器类型
+	byte				Byte
+	short				Short
+	int 				Integer
+	long				Long
+	float				Float
+	double				Double
+	char				Character
+	boolean				Boolean
+3.自动拆装箱：基本数据类型和对应的包装器类型之间不需要强转可以实现互相转换
+	基本---包装器  装箱
+	包装器---基本  拆箱
+ 注意：包装器类型(除char外)有一个parseXXX();可以把满足条件的String类型的值转换生成一个与之对应的基本数据类型
+        XXX.valueOf（）；可以把满足条件的String值转化生成一个与之对应的包装器类型

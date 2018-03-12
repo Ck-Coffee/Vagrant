@@ -1,0 +1,37 @@
+字符串：字符组成的序列
+java里面的字符串：String  StringBuffer  StringBuilder
+
+1.String：java.lang包，不用导包，不可变,如果要比较两个String对象的内容是否一样，我们要使用equals方法，而不能用“==”
+	  赋值方法：
+		String st="123";
+		String st1=new String("123");
+2.StringBuffer：java.lang包，不用导包。不用导包。但是线程安全，可变，一
+
+3.StringBuilder：与StringBuffer几乎完全相同，但是线程不安全。
+
+两者比较：都可变，前者线程安全，效率慢；后者线程不安全，但效率快。
+
+格式化控制台输出：Sysotem.out.printf(格式化标识符，数值列表);
+	格式化标识符：%开头，再加每种数据的格式标识符
+	
+	浮点数： 	 %f
+	整数：  	 %d
+	字符型： 	 %c
+	布尔型：	 %b
+	科学计数法： %e
+	字符串：	 %s
+	
+	关于宽度，保留位数举例：
+		double amount=121423.4;
+		double InterestRate=0.033;
+		double money=amount*InterestRate;
+		System.out.printf("获得总额为：%8.2f",money);
+	.2代表小数点后保留位数
+	8指代结果的宽度，包含小数点，如果给定宽度小于结构则自动补齐，对齐方式为右对齐
+	-：在宽度之前加符号代表左对齐
+注意：数值必须与前面的格式修饰符呼应
+
+不可改变的类：
+	a.所有属性私有化
+	b.没有任何修改属性的方法（set方法）
+	c.不能存在有返回属性区数据引用的方法
